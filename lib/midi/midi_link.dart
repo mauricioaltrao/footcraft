@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart' show AnyhowException;
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart'
+    show AnyhowException;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../src/rust/api/midi.dart' as midi;
@@ -36,6 +37,9 @@ class MidiLink extends ChangeNotifier {
   /// SysEx completos recebidos.
   final StreamController<Uint8List> sysex = StreamController.broadcast();
 
+  /// Cada mensagem comum (CC, PC, nota) assim que chega (modo de teste).
+  final StreamController<Uint8List> messages = StreamController.broadcast();
+
   /// Últimas mensagens comuns (CC, PC, notas), a mais nova no fim.
   final List<MidiEvent> recent = [];
   static const _recentLimit = 200;
@@ -62,11 +66,14 @@ class MidiLink extends ChangeNotifier {
 
   /// No Linux o nome da porta termina com "cliente:porta" (ex.: "36:0"), que
   /// muda ao religar a interface; a escolha é lembrada sem isso.
-  static String _stable(String name) => name.replaceFirst(RegExp(r'\s+\d+:\d+$'), '');
+  static String _stable(String name) =>
+      name.replaceFirst(RegExp(r'\s+\d+:\d+$'), '');
 
   static bool _isSystem(String name) {
     final n = name.toLowerCase();
-    return n.contains('midi through') || n.contains('pipewire') || n.startsWith('system');
+    return n.contains('midi through') ||
+        n.contains('pipewire') ||
+        n.startsWith('system');
   }
 
   Future<void> refresh({bool autoOpen = false}) async {
@@ -89,7 +96,9 @@ class MidiLink extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     String? pick(List<String> ports, String key) {
       final saved = prefs.getString(key);
-      final match = ports.where((p) => saved != null && _stable(p) == saved).firstOrNull;
+      final match = ports
+          .where((p) => saved != null && _stable(p) == saved)
+          .firstOrNull;
       if (match != null) return match;
       // Sem escolha guardada: se só há uma porta de verdade, é ela.
       final real = ports.where((p) => !_isSystem(p)).toList();
@@ -179,9 +188,12 @@ class MidiLink extends ChangeNotifier {
   }
 
   void _log(Uint8List bytes) {
+    if (bytes.isNotEmpty && bytes[0] != 0xF0) messages.add(bytes);
     recent.add(MidiEvent(bytes));
-    if (recent.length > _recentLimit) recent.removeRange(0, recent.length - _recentLimit);
+    if (recent.length > _recentLimit)
+      recent.removeRange(0, recent.length - _recentLimit);
   }
 
-  static String _message(Object e) => e is AnyhowException ? e.message.split('\n').first : e.toString();
+  static String _message(Object e) =>
+      e is AnyhowException ? e.message.split('\n').first : e.toString();
 }

@@ -281,5 +281,33 @@
   "replace": "Substituir",
   "replaceTitle": "Substituir a configuração aberta?",
   "replaceBody": "Há mudanças que não foram enviadas nem salvas. Dá para voltar com Desfazer.",
-  "use": "Usar"
+  "use": "Usar",
+  "testMode": "Modo de teste",
+  "testModeStop": "Parar",
+  "testModeHint": "Com a FCB fora da configuração, pise nos pedais: o app mostra qual foi reconhecido, pelo que ele mandou.",
+  "testWaiting": "Esperando um pedal…",
+  "testPressed": "Pisado: {pedal}",
+  "@testPressed": {
+    "placeholders": {
+      "pedal": {
+        "type": "String"
+      }
+    }
+  },
+  "testAmbiguous": "(mais {count} pedais mandam o mesmo)",
+  "@testAmbiguous": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "testUnmatched": "Nenhum pedal desta configuração manda isso: {messages}. A FCB pode estar com outra programação.",
+  "@testUnmatched": {
+    "placeholders": {
+      "messages": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -460,4 +460,32 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get use => 'Usar';
+
+  @override
+  String get testMode => 'Modo de teste';
+
+  @override
+  String get testModeStop => 'Parar';
+
+  @override
+  String get testModeHint =>
+      'Com a FCB fora da configuração, pise nos pedais: o app mostra qual foi reconhecido, pelo que ele mandou.';
+
+  @override
+  String get testWaiting => 'Esperando um pedal…';
+
+  @override
+  String testPressed(String pedal) {
+    return 'Pisado: $pedal';
+  }
+
+  @override
+  String testAmbiguous(int count) {
+    return '(mais $count pedais mandam o mesmo)';
+  }
+
+  @override
+  String testUnmatched(String messages) {
+    return 'Nenhum pedal desta configuração manda isso: $messages. A FCB pode estar com outra programação.';
+  }
 }

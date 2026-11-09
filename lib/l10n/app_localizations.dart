@@ -877,6 +877,48 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Usar'**
   String get use;
+
+  /// No description provided for @testMode.
+  ///
+  /// In pt, this message translates to:
+  /// **'Modo de teste'**
+  String get testMode;
+
+  /// No description provided for @testModeStop.
+  ///
+  /// In pt, this message translates to:
+  /// **'Parar'**
+  String get testModeStop;
+
+  /// No description provided for @testModeHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'Com a FCB fora da configuração, pise nos pedais: o app mostra qual foi reconhecido, pelo que ele mandou.'**
+  String get testModeHint;
+
+  /// No description provided for @testWaiting.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esperando um pedal…'**
+  String get testWaiting;
+
+  /// No description provided for @testPressed.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pisado: {pedal}'**
+  String testPressed(String pedal);
+
+  /// No description provided for @testAmbiguous.
+  ///
+  /// In pt, this message translates to:
+  /// **'(mais {count} pedais mandam o mesmo)'**
+  String testAmbiguous(int count);
+
+  /// No description provided for @testUnmatched.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nenhum pedal desta configuração manda isso: {messages}. A FCB pode estar com outra programação.'**
+  String testUnmatched(String messages);
 }
 
 class _AppLocalizationsDelegate

@@ -18,7 +18,8 @@ import 'dart:typed_data';
 abstract final class FcbSysex {
   static const length = 2352;
   static const header = [0xF0, 0x00, 0x20, 0x32, 0x01, 0x0C, 0x0F];
-  static const groups = (length - 7 - 1) ~/ 8; // 293 (cabeçalho de 7 bytes e F7)
+  static const groups =
+      (length - 7 - 1) ~/ 8; // 293 (cabeçalho de 7 bytes e F7)
   static const decodedLength = groups * 7; // 2051
 
   /// Se [raw] é um dump completo da FCB1010.
@@ -69,44 +70,67 @@ class FcbProgram {
   final bool enabled;
   final int program;
 
-  FcbProgram copyWith({bool? enabled, int? program}) =>
-      FcbProgram(enabled: enabled ?? this.enabled, program: program ?? this.program);
+  FcbProgram copyWith({bool? enabled, int? program}) => FcbProgram(
+    enabled: enabled ?? this.enabled,
+    program: program ?? this.program,
+  );
 
   @override
-  bool operator ==(Object other) => other is FcbProgram && other.enabled == enabled && other.program == program;
+  bool operator ==(Object other) =>
+      other is FcbProgram &&
+      other.enabled == enabled &&
+      other.program == program;
   @override
   int get hashCode => Object.hash(enabled, program);
 }
 
 /// Control Change fixo mandado ao pisar no pedal.
 class FcbControl {
-  const FcbControl({required this.enabled, required this.controller, required this.value});
+  const FcbControl({
+    required this.enabled,
+    required this.controller,
+    required this.value,
+  });
   final bool enabled;
   final int controller;
   final int value;
 
-  FcbControl copyWith({bool? enabled, int? controller, int? value}) => FcbControl(
-    enabled: enabled ?? this.enabled,
-    controller: controller ?? this.controller,
-    value: value ?? this.value,
-  );
+  FcbControl copyWith({bool? enabled, int? controller, int? value}) =>
+      FcbControl(
+        enabled: enabled ?? this.enabled,
+        controller: controller ?? this.controller,
+        value: value ?? this.value,
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is FcbControl && other.enabled == enabled && other.controller == controller && other.value == value;
+      other is FcbControl &&
+      other.enabled == enabled &&
+      other.controller == controller &&
+      other.value == value;
   @override
   int get hashCode => Object.hash(enabled, controller, value);
 }
 
 /// Pedal de expressão (A ou B): manda o CC entre [min] e [max].
 class FcbExpression {
-  const FcbExpression({required this.enabled, required this.controller, required this.min, required this.max});
+  const FcbExpression({
+    required this.enabled,
+    required this.controller,
+    required this.min,
+    required this.max,
+  });
   final bool enabled;
   final int controller;
   final int min;
   final int max;
 
-  FcbExpression copyWith({bool? enabled, int? controller, int? min, int? max}) => FcbExpression(
+  FcbExpression copyWith({
+    bool? enabled,
+    int? controller,
+    int? min,
+    int? max,
+  }) => FcbExpression(
     enabled: enabled ?? this.enabled,
     controller: controller ?? this.controller,
     min: min ?? this.min,
@@ -130,10 +154,12 @@ class FcbNote {
   final bool enabled;
   final int note;
 
-  FcbNote copyWith({bool? enabled, int? note}) => FcbNote(enabled: enabled ?? this.enabled, note: note ?? this.note);
+  FcbNote copyWith({bool? enabled, int? note}) =>
+      FcbNote(enabled: enabled ?? this.enabled, note: note ?? this.note);
 
   @override
-  bool operator ==(Object other) => other is FcbNote && other.enabled == enabled && other.note == note;
+  bool operator ==(Object other) =>
+      other is FcbNote && other.enabled == enabled && other.note == note;
   @override
   int get hashCode => Object.hash(enabled, note);
 }
@@ -180,11 +206,17 @@ class FcbPreset {
     note: note ?? this.note,
   );
 
-  FcbPreset withProgram(int i, FcbProgram p) => copyWith(programs: [...programs]..[i] = p);
+  FcbPreset withProgram(int i, FcbProgram p) =>
+      copyWith(programs: [...programs]..[i] = p);
 
   /// Nada ligado: o pedal não manda nada (fora os pedais de expressão).
   bool get silent =>
-      programs.every((p) => !p.enabled) && !cc1.enabled && !cc2.enabled && !note.enabled && !relay1 && !relay2;
+      programs.every((p) => !p.enabled) &&
+      !cc1.enabled &&
+      !cc2.enabled &&
+      !note.enabled &&
+      !relay1 &&
+      !relay2;
 
   @override
   bool operator ==(Object other) =>
@@ -198,7 +230,16 @@ class FcbPreset {
       other.expB == expB &&
       other.note == note;
   @override
-  int get hashCode => Object.hash(Object.hashAll(programs), cc1, cc2, relay1, relay2, expA, expB, note);
+  int get hashCode => Object.hash(
+    Object.hashAll(programs),
+    cc1,
+    cc2,
+    relay1,
+    relay2,
+    expA,
+    expB,
+    note,
+  );
 }
 
 bool _listEq<T>(List<T> a, List<T> b) {
@@ -210,7 +251,18 @@ bool _listEq<T>(List<T> a, List<T> b) {
 }
 
 /// Tipos de mensagem com canal MIDI próprio (configuração global).
-enum FcbChannel { program1, program2, program3, program4, program5, control1, control2, expressionA, expressionB, note }
+enum FcbChannel {
+  program1,
+  program2,
+  program3,
+  program4,
+  program5,
+  control1,
+  control2,
+  expressionA,
+  expressionB,
+  note,
+}
 
 /// Configurações globais.
 class FcbGlobals {
@@ -259,8 +311,14 @@ class FcbGlobals {
       other.upTogglesRelay1 == upTogglesRelay1 &&
       other.downTogglesRelay2 == downTogglesRelay2;
   @override
-  int get hashCode =>
-      Object.hash(Object.hashAll(channels), directSelect, runningStatus, merge, upTogglesRelay1, downTogglesRelay2);
+  int get hashCode => Object.hash(
+    Object.hashAll(channels),
+    directSelect,
+    runningStatus,
+    merge,
+    upTogglesRelay1,
+    downTogglesRelay2,
+  );
 }
 
 /// Configuração completa da FCB1010: os bytes desempacotados do dump.
@@ -279,7 +337,8 @@ class FcbSetup {
   final Uint8List data;
 
   factory FcbSetup.fromSysex(List<int> raw) {
-    if (!FcbSysex.isDump(raw)) throw const FormatException('não é um dump da FCB1010');
+    if (!FcbSysex.isDump(raw))
+      throw const FormatException('não é um dump da FCB1010');
     return FcbSetup._(FcbSysex.unpack(raw));
   }
 
@@ -291,18 +350,40 @@ class FcbSetup {
 
   int _v(int i) => data[i] & 0x7F;
   bool _hi(int i) => data[i] & 0x80 != 0;
-  void _set(int i, int value, bool hi) => data[i] = (value.clamp(0, 127)) | (hi ? 0x80 : 0);
+  void _set(int i, int value, bool hi) =>
+      data[i] = (value.clamp(0, 127)) | (hi ? 0x80 : 0);
 
   FcbPreset preset(int index) {
     final o = index * _presetSize;
     return FcbPreset(
-      programs: [for (var k = 0; k < 5; k++) FcbProgram(enabled: !_hi(o + k), program: _v(o + k))],
-      cc1: FcbControl(enabled: !_hi(o + 5), controller: _v(o + 5), value: _v(o + 6)),
+      programs: [
+        for (var k = 0; k < 5; k++)
+          FcbProgram(enabled: !_hi(o + k), program: _v(o + k)),
+      ],
+      cc1: FcbControl(
+        enabled: !_hi(o + 5),
+        controller: _v(o + 5),
+        value: _v(o + 6),
+      ),
       relay1: _hi(o + 6),
-      cc2: FcbControl(enabled: !_hi(o + 7), controller: _v(o + 7), value: _v(o + 8)),
+      cc2: FcbControl(
+        enabled: !_hi(o + 7),
+        controller: _v(o + 7),
+        value: _v(o + 8),
+      ),
       relay2: _hi(o + 8),
-      expA: FcbExpression(enabled: !_hi(o + 9), controller: _v(o + 9), min: data[o + 10], max: data[o + 11]),
-      expB: FcbExpression(enabled: !_hi(o + 12), controller: _v(o + 12), min: data[o + 13], max: data[o + 14]),
+      expA: FcbExpression(
+        enabled: !_hi(o + 9),
+        controller: _v(o + 9),
+        min: data[o + 10],
+        max: data[o + 11],
+      ),
+      expB: FcbExpression(
+        enabled: !_hi(o + 12),
+        controller: _v(o + 12),
+        min: data[o + 13],
+        max: data[o + 14],
+      ),
       note: FcbNote(enabled: !_hi(o + 15), note: _v(o + 15)),
     );
   }
@@ -326,7 +407,10 @@ class FcbSetup {
   }
 
   FcbGlobals get globals => FcbGlobals(
-    channels: [for (var k = 0; k < FcbChannel.values.length; k++) data[_channels + k] & 0x0F],
+    channels: [
+      for (var k = 0; k < FcbChannel.values.length; k++)
+        data[_channels + k] & 0x0F,
+    ],
     directSelect: data[_flags] & 0x02 != 0,
     runningStatus: data[_flags] & 0x04 != 0,
     merge: data[_flags] & 0x10 != 0,

@@ -67,7 +67,8 @@ class FcbDocument extends ChangeNotifier {
     _changed();
   }
 
-  void setPreset(int index, FcbPreset preset) => edit((s) => s.setPreset(index, preset));
+  void setPreset(int index, FcbPreset preset) =>
+      edit((s) => s.setPreset(index, preset));
 
   void undo() {
     if (!canUndo) return;
@@ -119,7 +120,8 @@ class FcbDocument extends ChangeNotifier {
   }
 
   /// Abre um dump; lança [FormatException] se não for da FCB1010.
-  void loadSysex(List<int> raw, SetupSource source, String name) => _open(raw, source, name);
+  void loadSysex(List<int> raw, SetupSource source, String name) =>
+      _open(raw, source, name);
 
   void _open(List<int> raw, SetupSource source, String name) {
     final next = FcbSetup.fromSysex(raw);
@@ -158,7 +160,9 @@ class FcbDocument extends ChangeNotifier {
   bool _pendingSave = false;
 
   static Future<Directory> _dir() async {
-    final dir = Directory(p.join((await getApplicationSupportDirectory()).path, 'current'));
+    final dir = Directory(
+      p.join((await getApplicationSupportDirectory()).path, 'current'),
+    );
     await dir.create(recursive: true);
     return dir;
   }
@@ -174,14 +178,18 @@ class FcbDocument extends ChangeNotifier {
         _pendingSave = false;
         try {
           final dir = await _dir();
-          await File(p.join(dir.path, 'setup.syx')).writeAsBytes(setup.toSysex());
-          await File(p.join(dir.path, 'setup.json')).writeAsString(jsonEncode({
-            'source': source.name,
-            'name': sourceName,
-            'dirty': dirty,
-            'bank': bank,
-            'pedal': pedal,
-          }));
+          await File(
+            p.join(dir.path, 'setup.syx'),
+          ).writeAsBytes(setup.toSysex());
+          await File(p.join(dir.path, 'setup.json')).writeAsString(
+            jsonEncode({
+              'source': source.name,
+              'name': sourceName,
+              'dirty': dirty,
+              'bank': bank,
+              'pedal': pedal,
+            }),
+          );
         } catch (e) {
           debugPrint('[footcraft] não deu para guardar a configuração: $e');
         }
@@ -195,7 +203,9 @@ class FcbDocument extends ChangeNotifier {
       final dir = await _dir();
       final file = File(p.join(dir.path, 'setup.syx'));
       if (!file.existsSync()) return false;
-      final meta = jsonDecode(await File(p.join(dir.path, 'setup.json')).readAsString()) as Map<String, dynamic>;
+      final meta =
+          jsonDecode(await File(p.join(dir.path, 'setup.json')).readAsString())
+              as Map<String, dynamic>;
       setup = FcbSetup.fromSysex(await file.readAsBytes());
       _initialized = true;
       source = SetupSource.values.byName(meta['source'] as String);
@@ -213,11 +223,18 @@ class FcbDocument extends ChangeNotifier {
 
   /// Guarda uma cópia do que veio da FCB (backups/fcb-AAAAMMDD-HHMMSS.syx).
   static Future<File> saveDeviceBackup(List<int> raw) async {
-    final dir = Directory(p.join((await getApplicationDocumentsDirectory()).path, 'FootCraft', 'backups'));
+    final dir = Directory(
+      p.join(
+        (await getApplicationDocumentsDirectory()).path,
+        'FootCraft',
+        'backups',
+      ),
+    );
     await dir.create(recursive: true);
     final t = DateTime.now();
     String two(int v) => v.toString().padLeft(2, '0');
-    final name = 'fcb-${t.year}${two(t.month)}${two(t.day)}-${two(t.hour)}${two(t.minute)}${two(t.second)}.syx';
+    final name =
+        'fcb-${t.year}${two(t.month)}${two(t.day)}-${two(t.hour)}${two(t.minute)}${two(t.second)}.syx';
     return File(p.join(dir.path, name)).writeAsBytes(raw);
   }
 }

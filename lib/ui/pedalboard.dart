@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../fcb/fcb_document.dart';
 import '../fcb/fcb_sysex.dart';
+import '../fcb/test_mode.dart';
 import '../l10n/app_localizations.dart';
 import 'describe.dart';
 import 'theme.dart';
@@ -18,7 +19,7 @@ class Pedalboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final doc = FcbDocument.instance;
     return ListenableBuilder(
-      listenable: doc,
+      listenable: Listenable.merge([doc, TestMode.instance]),
       builder: (context, _) => Container(
         decoration: BoxDecoration(
           color: FcbColors.body,
@@ -47,6 +48,9 @@ class Pedalboard extends StatelessWidget {
                           child: _PedalTile(
                             index: FcbSetup.indexOf(doc.bank, k),
                             selected: doc.pedal == k,
+                            lit: TestMode.instance.isLit(
+                              FcbSetup.indexOf(doc.bank, k),
+                            ),
                             onTap: () {
                               doc.select(doc.bank, k);
                               onOpenPedal(FcbSetup.indexOf(doc.bank, k));
@@ -167,9 +171,13 @@ class _PedalTile extends StatelessWidget {
     required this.index,
     required this.selected,
     required this.onTap,
+    this.lit = false,
   });
   final int index;
   final bool selected;
+
+  /// Acabou de ser pisado na FCB (modo de teste).
+  final bool lit;
   final VoidCallback onTap;
 
   static Color _color(PedalPart part) => switch (part) {
@@ -215,11 +223,21 @@ class _PedalTile extends StatelessWidget {
                     colors: [FcbColors.pedalTop, FcbColors.pedal],
                   ),
                   border: Border.all(
-                    color: selected ? FcbColors.accent : Colors.black54,
-                    width: selected ? 2.5 : 1,
+                    color: lit
+                        ? Colors.greenAccent
+                        : selected
+                        ? FcbColors.accent
+                        : Colors.black54,
+                    width: lit ? 3 : (selected ? 2.5 : 1),
                   ),
-                  boxShadow: const [
-                    BoxShadow(
+                  boxShadow: [
+                    if (lit)
+                      const BoxShadow(
+                        color: Colors.greenAccent,
+                        blurRadius: 18,
+                        spreadRadius: 1,
+                      ),
+                    const BoxShadow(
                       color: Colors.black54,
                       blurRadius: 4,
                       offset: Offset(0, 2),
@@ -231,7 +249,10 @@ class _PedalTile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        _Led(on: selected),
+                        _Led(
+                          on: selected || lit,
+                          color: lit ? Colors.greenAccent : FcbColors.led,
+                        ),
                         const Spacer(),
                         Text(
                           '$number',
@@ -341,8 +362,9 @@ class _PedalTile extends StatelessWidget {
 }
 
 class _Led extends StatelessWidget {
-  const _Led({required this.on});
+  const _Led({required this.on, this.color = FcbColors.led});
   final bool on;
+  final Color color;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -350,10 +372,8 @@ class _Led extends StatelessWidget {
     height: 10,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
-      color: on ? FcbColors.led : FcbColors.ledOff,
-      boxShadow: on
-          ? const [BoxShadow(color: FcbColors.led, blurRadius: 8)]
-          : null,
+      color: on ? color : FcbColors.ledOff,
+      boxShadow: on ? [BoxShadow(color: color, blurRadius: 8)] : null,
     ),
   );
 }

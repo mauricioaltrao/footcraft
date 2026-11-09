@@ -17,38 +17,67 @@ enum BatchMode {
 
 /// Valor fixo ou em sequência (0–127; passa de 127 → fica em 127).
 class BatchNumber {
-  const BatchNumber({this.mode = BatchMode.keep, this.value = 0, this.step = 1});
+  const BatchNumber({
+    this.mode = BatchMode.keep,
+    this.value = 0,
+    this.step = 1,
+  });
   final BatchMode mode;
 
   /// Valor fixo, ou o primeiro da sequência.
   final int value;
   final int step;
 
-  int at(int n) => mode == BatchMode.sequence ? (value + step * n).clamp(0, 127) : value;
+  int at(int n) =>
+      mode == BatchMode.sequence ? (value + step * n).clamp(0, 127) : value;
 
-  BatchNumber copyWith({BatchMode? mode, int? value, int? step}) =>
-      BatchNumber(mode: mode ?? this.mode, value: value ?? this.value, step: step ?? this.step);
+  BatchNumber copyWith({BatchMode? mode, int? value, int? step}) => BatchNumber(
+    mode: mode ?? this.mode,
+    value: value ?? this.value,
+    step: step ?? this.step,
+  );
 }
 
 /// Control Change: o número do controle é sempre fixo; o valor pode andar.
 class BatchControl {
-  const BatchControl({this.mode = BatchMode.keep, this.controller = 0, this.value = const BatchNumber(mode: BatchMode.fixed, value: 127)});
+  const BatchControl({
+    this.mode = BatchMode.keep,
+    this.controller = 0,
+    this.value = const BatchNumber(mode: BatchMode.fixed, value: 127),
+  });
   final BatchMode mode; // keep, off ou fixed (= ligar)
   final int controller;
   final BatchNumber value;
 
-  BatchControl copyWith({BatchMode? mode, int? controller, BatchNumber? value}) =>
-      BatchControl(mode: mode ?? this.mode, controller: controller ?? this.controller, value: value ?? this.value);
+  BatchControl copyWith({
+    BatchMode? mode,
+    int? controller,
+    BatchNumber? value,
+  }) => BatchControl(
+    mode: mode ?? this.mode,
+    controller: controller ?? this.controller,
+    value: value ?? this.value,
+  );
 }
 
 class BatchExpression {
-  const BatchExpression({this.mode = BatchMode.keep, this.controller = 7, this.min = 0, this.max = 127});
+  const BatchExpression({
+    this.mode = BatchMode.keep,
+    this.controller = 7,
+    this.min = 0,
+    this.max = 127,
+  });
   final BatchMode mode; // keep, off ou fixed (= ligar)
   final int controller;
   final int min;
   final int max;
 
-  BatchExpression copyWith({BatchMode? mode, int? controller, int? min, int? max}) => BatchExpression(
+  BatchExpression copyWith({
+    BatchMode? mode,
+    int? controller,
+    int? min,
+    int? max,
+  }) => BatchExpression(
     mode: mode ?? this.mode,
     controller: controller ?? this.controller,
     min: min ?? this.min,
@@ -63,7 +92,13 @@ enum BatchSwitch { keep, on, off }
 /// pedal escolhido, na ordem banco 0 pedal 1, banco 0 pedal 2...
 class BatchPlan {
   const BatchPlan({
-    this.programs = const [BatchNumber(), BatchNumber(), BatchNumber(), BatchNumber(), BatchNumber()],
+    this.programs = const [
+      BatchNumber(),
+      BatchNumber(),
+      BatchNumber(),
+      BatchNumber(),
+      BatchNumber(),
+    ],
     this.cc1 = const BatchControl(),
     this.cc2 = const BatchControl(),
     this.expA = const BatchExpression(controller: 7),
@@ -84,20 +119,25 @@ class BatchPlan {
 
   /// Receita pronta: cada pedal manda só o CC [controller] com um valor
   /// próprio (1, 2, 3...), sem trocas de programa, nota ou relés.
-  factory BatchPlan.oneCcPerPedal({int controller = 102, int first = 1}) => BatchPlan(
-    programs: const [
-      BatchNumber(mode: BatchMode.off),
-      BatchNumber(mode: BatchMode.off),
-      BatchNumber(mode: BatchMode.off),
-      BatchNumber(mode: BatchMode.off),
-      BatchNumber(mode: BatchMode.off),
-    ],
-    cc1: BatchControl(mode: BatchMode.fixed, controller: controller, value: BatchNumber(mode: BatchMode.sequence, value: first)),
-    cc2: const BatchControl(mode: BatchMode.off),
-    note: const BatchNumber(mode: BatchMode.off),
-    relay1: BatchSwitch.off,
-    relay2: BatchSwitch.off,
-  );
+  factory BatchPlan.oneCcPerPedal({int controller = 102, int first = 1}) =>
+      BatchPlan(
+        programs: const [
+          BatchNumber(mode: BatchMode.off),
+          BatchNumber(mode: BatchMode.off),
+          BatchNumber(mode: BatchMode.off),
+          BatchNumber(mode: BatchMode.off),
+          BatchNumber(mode: BatchMode.off),
+        ],
+        cc1: BatchControl(
+          mode: BatchMode.fixed,
+          controller: controller,
+          value: BatchNumber(mode: BatchMode.sequence, value: first),
+        ),
+        cc2: const BatchControl(mode: BatchMode.off),
+        note: const BatchNumber(mode: BatchMode.off),
+        relay1: BatchSwitch.off,
+        relay2: BatchSwitch.off,
+      );
 
   /// Receita pronta: cada pedal troca para o programa de mesmo número
   /// (Program Change 0, 1, 2...), sem os demais itens.
@@ -157,20 +197,32 @@ class BatchPlan {
     FcbControl control(FcbControl c, BatchControl rule) => switch (rule.mode) {
       BatchMode.keep => c,
       BatchMode.off => c.copyWith(enabled: false),
-      _ => FcbControl(enabled: true, controller: rule.controller, value: rule.value.at(n)),
+      _ => FcbControl(
+        enabled: true,
+        controller: rule.controller,
+        value: rule.value.at(n),
+      ),
     };
-    FcbExpression expression(FcbExpression e, BatchExpression rule) => switch (rule.mode) {
-      BatchMode.keep => e,
-      BatchMode.off => e.copyWith(enabled: false),
-      _ => FcbExpression(enabled: true, controller: rule.controller, min: rule.min, max: rule.max),
-    };
+    FcbExpression expression(FcbExpression e, BatchExpression rule) =>
+        switch (rule.mode) {
+          BatchMode.keep => e,
+          BatchMode.off => e.copyWith(enabled: false),
+          _ => FcbExpression(
+            enabled: true,
+            controller: rule.controller,
+            min: rule.min,
+            max: rule.max,
+          ),
+        };
     bool relay(bool on, BatchSwitch rule) => switch (rule) {
       BatchSwitch.keep => on,
       BatchSwitch.on => true,
       BatchSwitch.off => false,
     };
     return FcbPreset(
-      programs: [for (var k = 0; k < 5; k++) program(preset.programs[k], programs[k])],
+      programs: [
+        for (var k = 0; k < 5; k++) program(preset.programs[k], programs[k]),
+      ],
       cc1: control(preset.cc1, cc1),
       cc2: control(preset.cc2, cc2),
       relay1: relay(preset.relay1, relay1),

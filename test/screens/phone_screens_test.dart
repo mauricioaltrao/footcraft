@@ -6,7 +6,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:typed_data';
+
 import 'package:footcraft/fcb/fcb_document.dart';
+import 'package:footcraft/fcb/test_mode.dart';
+import 'package:footcraft/midi/midi_link.dart';
 import 'package:footcraft/l10n/app_localizations.dart';
 import 'package:footcraft/ui/batch_screen.dart';
 import 'package:footcraft/ui/home_screen.dart';
@@ -50,7 +54,7 @@ void main() {
       ('pedal', const Scaffold(body: PedalEditor())),
       ('lote', const BatchScreen()),
     ]) {
-      testWidgets('$screen $name', (tester) async {
+      testWidgets('$screen $name', skip: !autoUpdateGoldenFiles, (tester) async {
         tester.view.physicalSize = size * 2.625;
         tester.view.devicePixelRatio = 2.625;
         addTearDown(tester.view.reset);
@@ -60,4 +64,20 @@ void main() {
       });
     }
   }
+
+  testWidgets('modo de teste com pedal pisado', skip: !autoUpdateGoldenFiles, (tester) async {
+    tester.view.physicalSize = const Size(412, 915) * 2.625;
+    tester.view.devicePixelRatio = 2.625;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(_app(const HomeScreen()));
+    TestMode.instance.start();
+    // A FCB manda CC 102 = 23 (banco 2, pedal 3) e mexe o pedal de expressão A.
+    MidiLink.instance.messages.add(Uint8List.fromList([0xB0, 102, 23]));
+    await tester.pump(const Duration(milliseconds: 120));
+    MidiLink.instance.messages.add(Uint8List.fromList([0xB0, 7, 90]));
+    await tester.pump(const Duration(milliseconds: 50));
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('goldens/teste_retrato.png'));
+    TestMode.instance.stop();
+    await tester.pumpAndSettle();
+  });
 }

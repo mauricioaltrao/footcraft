@@ -129,5 +129,12 @@
   "replace": "Replace",
   "replaceTitle": "Replace the open setup?",
   "replaceBody": "There are changes that were not sent or saved. You can go back with Undo.",
-  "use": "Use"
+  "use": "Use",
+  "testMode": "Test mode",
+  "testModeStop": "Stop",
+  "testModeHint": "With the FCB out of setup mode, press the pedals: the app shows which one it recognized from what it sent.",
+  "testWaiting": "Waiting for a pedal…",
+  "testPressed": "Pressed: {pedal}",
+  "testAmbiguous": "({count} more pedals send the same)",
+  "testUnmatched": "No pedal in this setup sends that: {messages}. The FCB may have a different setup."
 }

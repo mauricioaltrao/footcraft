@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../fcb/fcb_document.dart';
 import '../fcb/fcb_sysex.dart';
+import '../fcb/test_mode.dart';
 import '../l10n/app_localizations.dart';
 import 'batch_screen.dart';
 import 'describe.dart';
@@ -10,6 +11,7 @@ import 'globals_screen.dart';
 import 'midi_panel.dart';
 import 'pedal_editor.dart';
 import 'pedalboard.dart';
+import 'test_banner.dart';
 import 'theme.dart';
 import 'transfer_dialogs.dart';
 
@@ -74,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(padding: const EdgeInsets.only(bottom: 8), child: source),
             _Actions(compact: narrow),
             SizedBox(height: narrow ? 10 : 16),
+            const TestBanner(),
             Pedalboard(onOpenPedal: (_) => wide ? null : _showEditor()),
             const SizedBox(height: 12),
             if (wide)
@@ -245,6 +248,13 @@ class _Actions extends StatelessWidget {
             fg: FcbColors.accent,
             outlined: true,
           ),
+          button(
+            Icons.science,
+            l.testMode,
+            () => _toggleTest(context),
+            fg: Colors.greenAccent,
+            outlined: true,
+          ),
         ],
       );
     }
@@ -280,8 +290,30 @@ class _Actions extends StatelessWidget {
           icon: const Icon(Icons.auto_fix_high),
           label: Text(l.batchTitle),
         ),
+        ListenableBuilder(
+          listenable: TestMode.instance,
+          builder: (context, _) => OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.greenAccent,
+              backgroundColor: TestMode.instance.active
+                  ? Colors.greenAccent.withValues(alpha: 0.12)
+                  : null,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            ),
+            onPressed: () => _toggleTest(context),
+            icon: Icon(TestMode.instance.active ? Icons.stop : Icons.science),
+            label: Text(TestMode.instance.active ? l.testModeStop : l.testMode),
+          ),
+        ),
       ],
     );
+  }
+
+  /// Liga/desliga o modo de teste (pede as portas MIDI se faltarem).
+  static Future<void> _toggleTest(BuildContext context) async {
+    final test = TestMode.instance;
+    if (test.active) return test.stop();
+    if (await ensureConnected(context)) test.start();
   }
 }
 
