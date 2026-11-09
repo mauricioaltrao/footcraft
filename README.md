@@ -18,8 +18,7 @@ Linux, Android e Windows.
 - `lib/fcb/fcb_sysex.dart`: formato do dump (2352 bytes, pacotes de 7 bits).
   Edita só os bytes conhecidos e preserva o resto.
 - `lib/fcb/batch.dart`: programação em lote.
-- `rust/src/api/midi.rs`: portas MIDI pelo `midir` (mesma cópia com correção
-  para Android usada no Guitarrero e no GigFlow).
+- `rust/src/api/midi.rs`: portas MIDI pelo `midir`.
 - `test/`: o formato é conferido contra dumps reais (backup de uma FCB e o
   arquivo gravado nela) e contra as configurações de fábrica.
 
