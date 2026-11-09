@@ -1,0 +1,285 @@
+{
+  "@@locale": "pt",
+  "appTitle": "FootCraft",
+  "bank": "Banco",
+  "bankPedal": "Banco {bank} · Pedal {pedal}",
+  "@bankPedal": {
+    "placeholders": {
+      "bank": {
+        "type": "int"
+      },
+      "pedal": {
+        "type": "int"
+      }
+    }
+  },
+  "banksRange": "Bancos {from} a {to}",
+  "@banksRange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "pedalsRange": "Pedais {from} a {to}",
+  "@pedalsRange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "batchApplied": "{count} pedais programados. Dá para desfazer.",
+  "@batchApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "batchApply": "Aplicar em {count} pedais",
+  "@batchApply": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "batchTitle": "Programar vários",
+  "boardHint": "Toque num pedal para editar. Toque longo (ou botão direito) para copiar, colar ou silenciar. As mudanças só vão para a FCB quando você toca em Enviar para a FCB.",
+  "calibrationNote": "A calibração dos pedais de expressão é feita na própria FCB e é preservada como está.",
+  "cancel": "Cancelar",
+  "channelN": "Canal {n}",
+  "@channelN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "clear": "Limpar",
+  "close": "Fechar",
+  "connect": "Conectar",
+  "disconnect": "Desconectar",
+  "controlChanges": "Control Change",
+  "controlChangesHint": "Mensagens CC fixas mandadas ao pisar no pedal: número do controle e valor.",
+  "controller": "CC",
+  "copy": "Copiar",
+  "copyBank": "Copiar banco",
+  "copyPedal": "Copiar pedal",
+  "pastePedal": "Colar pedal",
+  "silencePedal": "Silenciar pedal",
+  "silencePedalHint": "Desliga trocas de programa, CCs, nota e relés (os pedais de expressão ficam).",
+  "directSelect": "Seleção direta",
+  "directSelectHint": "Os pedais 1–10 escolhem o banco e depois o preset, sem usar UP/DOWN.",
+  "runningStatus": "Running status",
+  "runningStatusHint": "Omite o byte de status repetido. Desligue se algum aparelho estranhar as mensagens.",
+  "merge": "Merge (MIDI IN → OUT)",
+  "mergeHint": "Repassa para a saída da FCB o que chega na entrada MIDI dela.",
+  "upTogglesRelay1": "UP liga/desliga o relé 1",
+  "downTogglesRelay2": "DOWN liga/desliga o relé 2",
+  "relayKeysHint": "Vale quando a seleção direta está ligada.",
+  "expressionN": "Expressão {name}",
+  "@expressionN": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expressionPedals": "Pedais de expressão",
+  "expressionPedalsHint": "O CC que cada pedal de expressão manda neste preset, entre o mínimo e o máximo.",
+  "factoryVAmp": "V-AMP (padrão de fábrica)",
+  "factoryGuitarAmps": "Amplificadores Behringer",
+  "factoryBassVAmp": "Bass V-AMP",
+  "factoryNamed": "Fábrica: {name}",
+  "@factoryNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newFromFactory": "Começar da configuração de fábrica:",
+  "fileOpened": "Arquivo aberto: {name}",
+  "@fileOpened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileSaved": "Salvo em {path}",
+  "@fileSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "notAnFcbFile": "{name} não é um dump da FCB1010.",
+  "@notAnFcbFile": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "globalSettings": "Configurações globais",
+  "inputFromFcb": "Entrada (vem da FCB)",
+  "outputToFcb": "Saída (vai para a FCB)",
+  "maximum": "Máx",
+  "minimum": "Mín",
+  "midiChannels": "Canais MIDI",
+  "midiChannelsHint": "Canal de cada tipo de mensagem, para todos os presets.",
+  "sameChannelForAll": "Usar o mesmo canal para tudo",
+  "operation": "Funcionamento",
+  "midiMonitor": "Monitor MIDI",
+  "midiMonitorHint": "O que chega da FCB. Pise nos pedais para conferir.",
+  "monitorEmpty": "Nada recebido ainda.",
+  "monitorSysex": "SysEx de {count} bytes",
+  "@monitorSysex": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "midiPorts": "Portas MIDI",
+  "midiPortsHint": "Escolha a interface MIDI ligada à FCB1010: a entrada recebe o que a FCB manda e a saída leva até ela.",
+  "noPorts": "Nenhuma porta MIDI encontrada. Ligue a interface USB-MIDI e toque em Atualizar.",
+  "notConnected": "Sem conexão MIDI",
+  "refresh": "Atualizar",
+  "modeKeep": "Manter",
+  "modeOff": "Desligar",
+  "modeOn": "Ligar",
+  "modeFixed": "Fixo",
+  "modeSequence": "Sequência",
+  "valueFixed": "Valor fixo",
+  "valueSequence": "Valor em sequência",
+  "startAt": "Começa em",
+  "step": "Passo",
+  "value": "Valor",
+  "program": "Programa",
+  "modified": "alterada",
+  "nextBank": "Próximo banco",
+  "previousBank": "Banco anterior",
+  "nextPedal": "Próximo pedal",
+  "previousPedal": "Pedal anterior",
+  "noPedalsChosen": "Nenhum pedal escolhido.",
+  "note": "Nota",
+  "noteSection": "Nota",
+  "noteHint": "Nota MIDI mandada ao pisar (60 = C4).",
+  "openFile": "Abrir arquivo .syx",
+  "saveFile": "Salvar arquivo .syx",
+  "openInEditor": "Abrir no editor",
+  "pedalCount": "{count} pedais",
+  "@pedalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "whichPedals": "Quais pedais",
+  "scopeAll": "Todos os 100",
+  "scopeCurrentBank": "Só o banco {bank}",
+  "@scopeCurrentBank": {
+    "placeholders": {
+      "bank": {
+        "type": "int"
+      }
+    }
+  },
+  "preview": "Como vai ficar",
+  "programChanges": "Program Change",
+  "programChangesHint": "Até 5 trocas de programa por pedal, cada uma no seu canal (configurações globais).",
+  "receiveFromFcb": "Receber da FCB",
+  "sendToFcb": "Enviar para a FCB",
+  "receiveTitle": "Receber da FCB1010",
+  "sendTitle": "Enviar para a FCB1010",
+  "stepPowerDown": "Ligue a FCB segurando o pedal DOWN por uns 2 segundos.",
+  "stepConfiguration": "Pressione UP até acender o LED CONFIGURATION.",
+  "stepSysexSend": "Pise no pedal 6 (SYSEX SEND).",
+  "stepSysexRcv": "Pise no pedal 7 (SYSEX RCV): o LED dele acende.",
+  "stepPressSend": "Toque em Enviar agora. Quando o LED do pedal 7 apagar, saia com um toque longo em DOWN.",
+  "waitingDump": "Esperando a FCB mandar…",
+  "receiving": "Recebendo: {done} de {total} bytes",
+  "@receiving": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "receivedDump": "Configuração recebida!",
+  "receivedIncomplete": "Chegou um SysEx da Behringer incompleto ({count} bytes). Tente de novo.",
+  "@receivedIncomplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "receiveNote": "Uma cópia do que chegar fica guardada em Documentos/FootCraft/backups.",
+  "receivedAt": "Recebido da FCB em {when}",
+  "@receivedAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "receivedOk": "Configuração da FCB aberta. Cópia em {path}",
+  "@receivedOk": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "sendWarning": "Isto substitui os 100 presets e as configurações globais da FCB. Se quiser uma cópia do que está nela, use Receber da FCB antes.",
+  "sendNow": "Enviar agora",
+  "sending": "Enviando…",
+  "sentCheckLed": "Enviado! Confira se o LED do pedal 7 apagou e saia da configuração com um toque longo em DOWN. Se o LED continuar aceso, a FCB não recebeu: refaça os passos 1 a 3.",
+  "sendFailed": "Não foi possível enviar: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "sendsNothing": "não manda nada",
+  "recipes": "Receitas prontas",
+  "recipeOneCc": "Um CC por pedal",
+  "recipeOneCcHint": "Cada pedal manda só este CC, com valores 1, 2, 3… em ordem. Fácil de mapear em outros apps.",
+  "recipeProgram": "Program Change por pedal",
+  "recipeProgramHint": "Cada pedal troca para o programa 0, 1, 2… em ordem.",
+  "recipeClear": "Recomeçar",
+  "redo": "Refazer",
+  "undo": "Desfazer",
+  "relayN": "Relé {n}",
+  "@relayN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "relays": "Relés (SWITCH 1 e 2)",
+  "relaysHint": "Os contatos de relé na traseira da FCB, para trocar canal de amplificador.",
+  "replace": "Substituir",
+  "replaceTitle": "Substituir a configuração aberta?",
+  "replaceBody": "Há mudanças que não foram enviadas nem salvas. Dá para voltar com Desfazer.",
+  "use": "Usar"
+}

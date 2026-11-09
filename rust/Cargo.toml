@@ -1,0 +1,24 @@
+[package]
+name = "rust_lib_footcraft"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+anyhow = "1.0.102"
+flutter_rust_bridge = "=2.12.0"
+midir = { git = "https://github.com/Boddlnagg/midir.git", version = "0.11.0" }
+parking_lot = "0.12"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = { version = "0.21", default-features = false }
+ndk-context = "0.1"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+# midir com correção no backend Android (cópia do Guitarrero, ver vendor/midir).
+[patch."https://github.com/Boddlnagg/midir.git"]
+midir = { path = "vendor/midir" }
